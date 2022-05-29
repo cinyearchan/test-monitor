@@ -10,7 +10,7 @@ module.exports = {
     filename: 'monitor.js'
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    static: path.join(__dirname, 'dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({

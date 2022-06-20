@@ -1,5 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+let host = 'cn-shanghai.log.aliyuncs.com'
+let project = 'czwmonitor'
 
 module.exports = {
   entry: './src/index.js',
@@ -11,6 +13,21 @@ module.exports = {
   },
   devServer: {
     static: path.join(__dirname, 'dist'),
+    onAfterSetupMiddleware: function(devServer) {
+      devServer.app.get('/success', function(req, res) {
+        res.json({ id: 1 })
+      })
+      devServer.app.post('/fail', function(req, res) {
+        res.sendStatus(500)
+      })
+    },
+    proxy: {
+      '/api': {
+        target: `http://${project}.${host}`,
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true
+      }
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
